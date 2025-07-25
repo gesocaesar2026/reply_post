@@ -1,0 +1,28 @@
+name: Facebook Auto Reply
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # كل 10 دقائق
+  workflow_dispatch:        # تشغيل يدويًا
+
+jobs:
+  reply:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.11
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Run the bot
+      env:
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        PAGE_ID: ${{ secrets.PAGE_ID }}
+      run: python main.py
