@@ -37,8 +37,8 @@ def reply_to_post(post_id, message):
     return response.status_code == 200
 
 def save_replied():
-    with open(REPLIED_FILE, "w") as f:
-        json.dump(replied_posts, f)
+    with open(REPLIED_FILE, "w", encoding="utf-8") as f:
+        json.dump(replied_posts, f, ensure_ascii=False, indent=2)
 
 def main():
     posts = get_last_posts()
