@@ -83,6 +83,4 @@ def main():
         if gemini_message:
             comment_on_post(post_id, gemini_message)
 
-if __name__ == "__main__":
-    while True:
-        main()
+
