@@ -1,38 +1,29 @@
-name: Facebook Auto Reply
+name: Post Random Message from Christ via Gemini
 
 on:
   schedule:
-    - cron: '2 * * * *'   # كل ساعة في الدقيقة 2 (بتوقيت UTC)
-  workflow_dispatch:       # لتشغيل يدويًا
+    - cron: '0 */2 * * *'  # كل ساعتين
+  workflow_dispatch:  # يسمح بالتشغيل اليدوي كمان
 
 jobs:
-  reply:
+  post-message:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        persist-credentials: true
-        fetch-depth: 0
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: 3.11
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
-    - name: Install dependencies
-      run: pip install -r requirements.txt
+      - name: Install Dependencies
+        run: pip install requests
 
-    - name: Run bot
-      env:
-        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        PAGE_ID: ${{ secrets.PAGE_ID }}
-      run: python main.py
-
-    - name: Commit replied posts file
-      run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git add replied_posts.json
-        git commit -m "🤖 Update replied posts list" || echo "Nothing to commit"
-        git push
+      - name: Run Posting Script
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          FB_PAGE_ACCESS_TOKEN: ${{ secrets.FB_PAGE_ACCESS_TOKEN }}
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+        run: python post_gemini_message.py
